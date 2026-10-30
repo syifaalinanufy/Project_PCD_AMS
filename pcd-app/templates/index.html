@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Nama Aplikasi</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <header>Nama Aplikasi — Copyright © Nama Tim (Tahun)</header>
+
+  <div class="layout">
+    <aside class="sidebar">
+      <button>File</button>
+      <button>Basic Ops</button>
+      <button>Enhancement</button>
+      <button>Noise</button>
+      <button>Edge Detection</button>
+      <button>Segmentation</button>
+      <button>About</button>
+    </aside>
+
+    <main>
+      <div class="pane"><h3>Citra Asli</h3><div class="box"></div></div>
+      <div class="pane"><h3>Citra Hasil</h3><div class="box"></div></div>
+    </main>
+  </div>
+</body>
+</html>
