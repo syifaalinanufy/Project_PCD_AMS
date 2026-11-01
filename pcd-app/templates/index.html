@@ -10,6 +10,7 @@
 
   <div class="layout">
     <aside class="sidebar">
+<<<<<<< Updated upstream
       <button>File</button>
       <button>Basic Ops</button>
       <button>Enhancement</button>
@@ -24,5 +25,552 @@
       <div class="pane"><h3>Citra Hasil</h3><div class="box"></div></div>
     </main>
   </div>
+=======
+
+      <div class="menu-item">
+        <button id="fileBtn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          File
+        </button>
+        <div id="fileMenu" class="dropdown">
+          <button id="openBtn">Open...</button>
+          <button>Save</button>
+          <button>Save As...</button>
+          <hr>
+          <a href="{{ url_for('landing') }}" class="exit">Exit</a>
+        </div>
+      </div>
+
+      <button id="basicBtn">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+        Basic Ops
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>
+        Enhancement
+      </button>
+        <button id="noiseBtn">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="7" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="18" cy="8" r="1"/><circle cx="8" cy="13" r="1"/><circle cx="15" cy="14" r="1"/><circle cx="5" cy="19" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="18" r="1"/></svg>
+        Noise
+      </button>
+      <button id="edgeBtn">
+        <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/></svg>
+        Edge Detection
+      </button>
+      <button id="segBtn">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg>
+        Segmentation
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>
+        About
+      </button>
+    </aside>
+
+    <!-- AREA UTAMA -->
+    <main class="workspace">
+
+      <!-- Tampilan Homepage -->
+      <section id="homeView" class="view">
+        <div id="openArea" class="open-area">
+          <span id="placeholder">Open file</span>
+          <img id="preview" alt="Citra">
+        </div>
+      </section>
+
+      <!-- Tampilan Basic Ops -->
+      <section id="opsView" class="view hidden">
+
+        <div class="ribbon" id="ribbon">
+          <div class="rcard">
+            <h4>Basic Ops</h4>
+            <button>Negative</button>
+            <button>Thresholding</button>
+            <button>Convolution</button>
+            <button>Fourier Transform</button>
+          </div>
+          <div class="rcard">
+            <h4>Arithmetic</h4>
+            <button>Add (+)</button>
+            <button>Subtract (-)</button>
+            <button>Multiply (x)</button>
+            <button>Divide (÷)</button>
+          </div>
+          <div class="rcard">
+            <h4>Boolean</h4>
+            <button>NOT</button>
+            <button>AND</button>
+            <button>OR</button>
+            <button>XOR</button>
+          </div>
+          <div class="rcard">
+            <h4>Geometrics</h4>
+            <button>Translation</button>
+            <button>Rotation</button>
+            <button>Zooming</button>
+            <button>Flipping</button>
+            <button>Cropping</button>
+          </div>
+          <div class="rcard">
+            <h4>Colouring</h4>
+            <button>Binary</button>
+            <button>Grayscale</button>
+            <button>RGB</button>
+            <button>HSV</button>
+            <button>CMY</button>
+            <button>YUV</button>
+            <button>YIQ</button>
+            <button>Pseudo</button>
+          </div>
+        </div>
+
+        <div class="panels">
+          <div class="panel images">
+            <div class="imgbox">
+              <h4>Gambar Asli</h4>
+              <div class="canvas"><img id="imgAsli" alt=""></div>
+            </div>
+            <div class="imgbox">
+              <h4>Gambar Hasil</h4>
+              <div class="canvas"><img id="imgHasil" alt=""></div>
+            </div>
+          </div>
+          <div class="panel histo">
+            <h4>Histogram</h4>
+            <div class="canvas"></div>
+          </div>
+        </div>
+
+        <div class="params">
+          <div class="p-name">
+            <strong>Parameter</strong>
+            <small id="opName">Pilih operasi</small>
+          </div>
+          <div class="p-slider">
+            <label for="nilai">Nilai Konstanta <b id="nilaiVal">50</b></label>
+            <input type="range" id="nilai" min="0" max="100" value="50">
+          </div>
+          <div class="p-actions">
+            <button class="primary">Terapkan</button>
+            <button>Undo</button>
+            <button>Reset</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Tampilan Noise -->
+      <section id="noiseView" class="view hidden">
+
+        <div class="ribbon" id="noiseRibbon">
+          <div class="rcard">
+            <h4>Noise</h4>
+            <button data-noise="gaussian">Gaussian Noise</button>
+            <button data-noise="rayleigh">Rayleigh Noise</button>
+            <button data-noise="erlang">Erlang (Gamma) Noise</button>
+            <button data-noise="uniform">Uniform Noise</button>
+            <button data-noise="impulse">Impulse Noise</button>
+          </div>
+        </div>
+
+        <div class="panels">
+          <div class="panel images">
+            <div class="imgbox">
+              <h4>Gambar Asli</h4>
+              <div class="canvas"><img id="imgAsliN" alt=""></div>
+            </div>
+            <div class="imgbox">
+              <h4>Gambar Hasil</h4>
+              <div class="canvas"><img id="imgHasilN" alt=""></div>
+            </div>
+          </div>
+          <div class="panel histo">
+            <h4>Histogram</h4>
+            <div class="canvas"></div>
+          </div>
+        </div>
+
+        <div class="params">
+          <div class="p-name">
+            <strong>Parameter</strong>
+            <small id="noiseName">Gaussian</small>
+          </div>
+          <div class="p-box" id="noiseParams"></div>
+          <div class="p-actions">
+            <button class="primary">Terapkan</button>
+            <button>Undo</button>
+            <button>Reset</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Tampilan Edge Detection -->
+      <section id="edgeView" class="view hidden">
+
+        <div class="ribbon" id="edgeRibbon">
+          <div class="rcard">
+            <h4>1st Differential Gradient</h4>
+            <button data-edge="sobel">Sobel</button>
+            <button data-edge="prewitt">Prewitt</button>
+            <button data-edge="roberts">Roberts</button>
+          </div>
+          <div class="rcard">
+            <h4>2nd Differential Gradient</h4>
+            <button data-edge="laplacian">Laplacian</button>
+            <button data-edge="log">Laplacian of Gaussian</button>
+            <button data-edge="canny">Canny</button>
+          </div>
+          <div class="rcard">
+            <h4>Compass</h4>
+            <button data-edge="kirsch">Compass (Kirsch)</button>
+          </div>
+        </div>
+
+        <div class="panels">
+          <div class="panel images">
+            <div class="imgbox">
+              <h4>Gambar Asli</h4>
+              <div class="canvas"><img id="imgAsliE" alt=""></div>
+            </div>
+            <div class="imgbox">
+              <h4>Gambar Hasil</h4>
+              <div class="canvas"><img id="imgHasilE" alt=""></div>
+            </div>
+          </div>
+          <div class="panel histo">
+            <h4>Histogram</h4>
+            <div class="canvas"></div>
+          </div>
+        </div>
+
+        <div class="params">
+          <div class="p-name">
+            <strong>Parameter</strong>
+            <small id="edgeName">Pilih Operasi</small>
+          </div>
+          <div class="p-box" id="edgeParams"></div>
+          <div class="p-actions">
+            <button class="primary">Terapkan</button>
+            <button>Undo</button>
+            <button>Reset</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Tampilan Segmentation -->
+      <section id="segView" class="view hidden">
+
+        <div class="ribbon" id="segRibbon">
+          <div class="rcard">
+            <h4>Segmentation</h4>
+            <button data-seg="region">Region Growing</button>
+            <button data-seg="kmeans">K-Means Clustering</button>
+            <button data-seg="otsu">Otsu Thresholding</button>
+          </div>
+        </div>
+
+        <div class="panels">
+          <div class="panel images">
+            <div class="imgbox">
+              <h4>Gambar Asli</h4>
+              <div class="canvas"><img id="imgAsliS" alt=""></div>
+            </div>
+            <div class="imgbox">
+              <h4>Gambar Hasil</h4>
+              <div class="canvas"><img id="imgHasilS" alt=""></div>
+            </div>
+          </div>
+          <div class="panel histo">
+            <h4>Histogram</h4>
+            <div class="canvas"></div>
+          </div>
+        </div>
+
+        <div class="params">
+          <div class="p-name">
+            <strong>Parameter</strong>
+            <small id="segName">Pilih Operasi</small>
+          </div>
+          <div class="p-box" id="segParams"></div>
+          <div class="p-actions">
+            <button class="primary">Terapkan</button>
+            <button>Undo</button>
+            <button>Reset</button>
+          </div>
+        </div>
+
+      </section>
+    </main>
+  </div>
+
+  <footer>PicForge-copyright © kelompok -(tahun)</footer>
+  <input type="file" id="fileInput" accept="image/*" hidden>
+
+   <script>
+    const $ = (s) => document.querySelector(s);
+    let imgURL = null;
+
+    const fileBtn = $("#fileBtn"), fileMenu = $("#fileMenu"), basicBtn = $("#basicBtn");
+    const homeView = $("#homeView"), opsView = $("#opsView");
+
+    /* dropdown File */
+    function closeMenu() { fileMenu.classList.remove("show"); fileBtn.classList.remove("active"); }
+    fileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      fileMenu.classList.toggle("show");
+      fileBtn.classList.toggle("active");
+    });
+    document.addEventListener("click", closeMenu);
+
+    /* buka file */
+    const openFile = () => $("#fileInput").click();
+    $("#openBtn").addEventListener("click", openFile);
+    $("#openArea").addEventListener("click", () => { if (!imgURL) openFile(); });
+
+    $("#fileInput").addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      imgURL = URL.createObjectURL(f);
+      $("#preview").src = imgURL;
+      $("#preview").style.display = "block";
+      $("#placeholder").style.display = "none";
+      $("#imgAsli").src = imgURL;
+      $("#imgAsli").style.display = "block";
+      $("#imgAsliN").src = imgURL;
+      $("#imgAsliN").style.display = "block";
+      $("#imgAsliE").src = imgURL;
+      $("#imgAsliE").style.display = "block";
+    });
+
+        /* pindah tampilan */
+    const noiseView = $("#noiseView"), noiseBtn = $("#noiseBtn");
+    const edgeView = $("#edgeView"), edgeBtn = $("#edgeBtn");
+    const segView = $("#segView"), segBtn = $("#segBtn");
+
+    function showView(view, btn) {
+      [homeView, opsView, noiseView, edgeView, segView].forEach((v) => v.classList.add("hidden"));
+      document.querySelectorAll(".sidebar > button").forEach((b) => b.classList.remove("active"));
+      view.classList.remove("hidden");
+      btn.classList.add("active");
+    }
+    basicBtn.addEventListener("click", () => showView(opsView, basicBtn));
+    noiseBtn.addEventListener("click", () => showView(noiseView, noiseBtn));
+    edgeBtn.addEventListener("click", () => showView(edgeView, edgeBtn));
+    segBtn.addEventListener("click", () => showView(segView, segBtn));
+
+    /* pilih operasi di ribbon */
+    document.querySelectorAll("#ribbon button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#ribbon button").forEach((x) => x.classList.remove("sel"));
+        b.classList.add("sel");
+        $("#opName").textContent = b.textContent;
+      });
+    });
+
+    /* slider */
+    $("#nilai").addEventListener("input", (e) => { $("#nilaiVal").textContent = e.target.value; });
+
+    /* ===== Noise: daftar parameter per operasi ===== */
+    const NOISE = {
+      gaussian: { name: "Gaussian", params: [
+        { id: "mean",  label: "Mean (μ)",   min: -100, max: 100, step: 1, value: 0 },
+        { id: "sigma", label: "Sigma (σ)",  min: 0,    max: 100, step: 1, value: 50 },
+      ]},
+      rayleigh: { name: "Rayleigh", params: [
+        { id: "scale", label: "Scale (σ)",  min: 1, max: 100, step: 1, value: 30 },
+      ]},
+      erlang: { name: "Erlang (Gamma)", params: [
+        { id: "shape", label: "Shape (k)",  min: 1, max: 10,  step: 1, value: 2 },
+        { id: "scale", label: "Scale (θ)",  min: 1, max: 50,  step: 1, value: 10 },
+      ]},
+      uniform: { name: "Uniform", params: [
+        { id: "min", label: "Min (a)", min: 0, max: 255, step: 1, value: 0 },
+        { id: "max", label: "Max (b)", min: 0, max: 255, step: 1, value: 50 },
+      ]},
+      impulse: { name: "Impulse (Salt & Pepper)", params: [
+        { id: "ps", label: "Prob. Salt (Ps)",   min: 0, max: 1, step: 0.01, value: 0.05 },
+        { id: "pp", label: "Prob. Pepper (Pp)", min: 0, max: 1, step: 0.01, value: 0.05 },
+      ]},
+    };
+
+    const noiseParams = $("#noiseParams");
+
+    function renderNoise(key) {
+      const cfg = NOISE[key];
+      $("#noiseName").textContent = cfg.name;
+      noiseParams.innerHTML = "";
+      cfg.params.forEach((p) => {
+        const dec = p.step < 1 ? 2 : 0;
+        const wrap = document.createElement("div");
+        wrap.className = "p-item";
+        wrap.innerHTML =
+          `<label for="np_${p.id}">${p.label} <b id="nv_${p.id}">${p.value.toFixed(dec)}</b></label>` +
+          `<input type="range" id="np_${p.id}" min="${p.min}" max="${p.max}" step="${p.step}" value="${p.value}">`;
+        wrap.querySelector("input").addEventListener("input", (e) => {
+          $("#nv_" + p.id).textContent = Number(e.target.value).toFixed(dec);
+        });
+        noiseParams.appendChild(wrap);
+      });
+    }
+
+    /* pilih jenis noise */
+    document.querySelectorAll("#noiseRibbon button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#noiseRibbon button").forEach((x) => x.classList.remove("sel"));
+        b.classList.add("sel");
+        renderNoise(b.dataset.noise);
+      });
+    });
+
+    renderNoise("gaussian");
+
+    /* ===== Edge Detection: daftar parameter per operasi ===== */
+    const AMBANG = { id: "t", label: "Ambang (0 = tanpa)", type: "range", min: 0, max: 255, step: 1, value: 50 };
+
+    const EDGE = {
+      sobel:   { name: "Sobel",   params: [AMBANG] },
+      prewitt: { name: "Prewitt", params: [AMBANG] },
+      roberts: { name: "Roberts", params: [AMBANG] },
+
+      laplacian: { name: "Laplacian", params: [
+        { id: "kernel", label: "Kernel", type: "select", value: 0, options: [
+          "0 1 0 · 1 -4 1 · 0 1 0",
+          "0 -1 0 · -1 4 -1 · 0 -1 0",
+          "-2 1 -2 · 1 4 1 · -2 1 -2",
+          "1 -2 1 · -2 4 -2 · 1 -2 1",
+          "-1 -1 -1 · -1 8 -1 · -1 -1 -1",
+          "1 4 1 · 4 -20 4 · 1 4 1",
+        ]},
+      ]},
+
+      log: { name: "Laplacian of Gaussian", params: [
+        { id: "sigma", label: "Sigma (σ)",    type: "range", min: 0.5, max: 5,  step: 0.1, value: 1.4 },
+        { id: "ksize", label: "Ukuran Kernel", type: "range", min: 3,   max: 15, step: 2,   value: 5 },
+      ]},
+
+      canny: { name: "Canny", params: [
+        { id: "sigma", label: "Sigma (SD Gaussian)",  type: "range", min: 0.5, max: 5,   step: 0.1, value: 1.0 },
+        { id: "t1",    label: "Threshold 1 (atas)",   type: "range", min: 0,   max: 255, step: 1,   value: 128 },
+        { id: "t2",    label: "Threshold 2 (bawah)",  type: "range", min: 0,   max: 255, step: 1,   value: 1 },
+      ]},
+
+      kirsch: { name: "Compass (Kirsch)", params: [
+        { id: "arah", label: "Arah", type: "select", value: 0, options: [
+          "Semua arah", "Utara", "Timur Laut", "Timur", "Tenggara",
+          "Selatan", "Barat Daya", "Barat", "Barat Laut",
+        ]},
+      ]},
+    };
+
+    const edgeParams = $("#edgeParams");
+
+        function renderEdge(key) {
+      edgeParams.innerHTML = "";
+
+      /* belum ada operasi dipilih */
+      if (!key) {
+        $("#edgeName").textContent = "Pilih operasi";
+        edgeParams.innerHTML = '<span class="tanpa">Pilih operasi untuk menampilkan parameter.</span>';
+        return;
+      }
+
+      const cfg = EDGE[key];
+      $("#edgeName").textContent = cfg.name;
+      cfg.params.forEach((p) => {
+        const wrap = document.createElement("div");
+        wrap.className = "p-item";
+
+        if (p.type === "select") {
+          const opts = p.options
+            .map((o, i) => `<option value="${i}"${i === p.value ? " selected" : ""}>${o}</option>`)
+            .join("");
+          wrap.innerHTML =
+            `<label for="ep_${p.id}">${p.label}</label>` +
+            `<select id="ep_${p.id}">${opts}</select>`;
+        } else {
+          const dec = (String(p.step).split(".")[1] || "").length;
+          wrap.innerHTML =
+            `<label for="ep_${p.id}">${p.label} <b id="ev_${p.id}">${Number(p.value).toFixed(dec)}</b></label>` +
+            `<input type="range" id="ep_${p.id}" min="${p.min}" max="${p.max}" step="${p.step}" value="${p.value}">`;
+          wrap.querySelector("input").addEventListener("input", (e) => {
+            $("#ev_" + p.id).textContent = Number(e.target.value).toFixed(dec);
+          });
+        }
+        edgeParams.appendChild(wrap);
+      });
+    }
+
+    /* pilih operasi edge */
+    document.querySelectorAll("#edgeRibbon button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#edgeRibbon button").forEach((x) => x.classList.remove("sel"));
+        b.classList.add("sel");
+        renderEdge(b.dataset.edge);
+      });
+    });
+
+    renderEdge("sobel");
+
+    /* ===== Segmentation: daftar parameter per operasi ===== */
+    const SEG = {
+      region: { name: "Region Growing", params: [
+        { id: "sx",  label: "Seed X (%)",                  type: "range", min: 0, max: 100, step: 1, value: 50 },
+        { id: "sy",  label: "Seed Y (%)",                  type: "range", min: 0, max: 100, step: 1, value: 50 },
+        { id: "tol", label: "Toleransi (selisih intensitas)", type: "range", min: 0, max: 255, step: 1, value: 20 },
+      ]},
+      kmeans: { name: "K-Means Clustering", params: [
+        { id: "k", label: "Jumlah Kluster", type: "range", min: 2, max: 10, step: 1, value: 3 },
+      ]},
+      otsu: { name: "Otsu Thresholding", params: [
+        { type: "info", text: "Tanpa parameter. Ambang dihitung otomatis dari histogram." },
+      ]},
+    };
+
+    const segParams = $("#segParams");
+
+    function renderSeg(key) {
+      segParams.innerHTML = "";
+
+      /* belum ada operasi dipilih */
+      if (!key) {
+        $("#segName").textContent = "Pilih operasi";
+        segParams.innerHTML = '<span class="tanpa">Pilih operasi untuk menampilkan parameter.</span>';
+        return;
+      }
+
+      const cfg = SEG[key];
+      $("#segName").textContent = cfg.name;
+      cfg.params.forEach((p) => {
+        const wrap = document.createElement("div");
+        wrap.className = "p-item";
+
+        if (p.type === "info") {
+          wrap.innerHTML = `<span class="tanpa">${p.text}</span>`;
+        } else {
+          wrap.innerHTML =
+            `<label for="sp_${p.id}">${p.label} <b id="sv_${p.id}">${p.value}</b></label>` +
+            `<input type="range" id="sp_${p.id}" min="${p.min}" max="${p.max}" step="${p.step}" value="${p.value}">`;
+          wrap.querySelector("input").addEventListener("input", (e) => {
+            $("#sv_" + p.id).textContent = e.target.value;
+          });
+        }
+        segParams.appendChild(wrap);
+      });
+    }
+
+    /* pilih operasi segmentasi */
+    document.querySelectorAll("#segRibbon button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#segRibbon button").forEach((x) => x.classList.remove("sel"));
+        b.classList.add("sel");
+        renderSeg(b.dataset.seg);
+      });
+    });
+
+    renderSeg("kmeans");
+  </script>
+>>>>>>> Stashed changes
 </body>
 </html>

@@ -12,6 +12,121 @@ header {
   color: #fff;
   padding: 12px;
   text-align: center;
+<<<<<<< Updated upstream
+=======
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ================= LANDING ================= */
+body.landing {
+  background:
+    radial-gradient(circle at 12% 90%, var(--green-soft) 0, transparent 38%),
+    radial-gradient(circle at 92% 8%, var(--sand) 0, transparent 35%),
+    var(--cream);
+  font-size: 14px;
+}
+
+.landing .hero {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 120px;
+  padding: 40px;
+  animation: fadeIn 0.9s ease;
+}
+
+.landing .text {
+  max-width: 460px;
+}
+.landing .text h1 {
+  margin: 0 0 12px;
+  font-size: 60px;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--green-dark);
+}
+.landing .text p {
+  margin: 0 0 36px;
+  font-size: 32px;
+  font-weight: 300;
+  line-height: 1.3;
+  color: var(--muted);
+}
+
+.btn-start {
+  display: inline-block;
+  padding: 14px 44px;
+  background: var(--green);
+  color: var(--cream-2);
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 6px 16px rgba(63, 90, 68, 0.28);
+  transition:
+    background 0.2s,
+    transform 0.2s;
+}
+.btn-start:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+}
+
+.logo {
+  width: 420px;
+  height: 420px;
+  border-radius: 48px;
+  overflow: hidden;
+  background: var(--green-dark);
+  border: 8px solid var(--cream-2);
+  box-shadow: 0 12px 32px rgba(63, 90, 68, 0.25);
+}
+.logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.landing footer {
+  text-align: right;
+  padding: 20px 32px;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ================= APLIKASI ================= */
+/* Warna diambil dari mockup referensi (hijau zaitun, khaki, krem). */
+:root {
+  --hijau-tua: #444830;   /* sidebar */
+  --hijau: #565f3f;       /* tombol utama, item terpilih */
+  --khaki: #7a6d4a;       /* menu aktif */
+  --krem: #eee2cf;        /* latar area kerja */
+  --krem-muda: #f6eedd;   /* kartu dan panel */
+  --tan: #dfceb4;
+  --pasir: #ccc0ad;       /* garis tepi */
+  --teks: #2f2b22;
+  --teks-2: #5f5848;
+}
+
+body.app {
+  background: var(--hijau-tua);
+}
+body.app footer {
+  background: var(--krem);
+  color: var(--teks-2);
+>>>>>>> Stashed changes
 }
 
 .layout {
@@ -20,6 +135,7 @@ header {
   min-height: 0;
 }
 
+<<<<<<< Updated upstream
 .sidebar {
   width: 200px;
   background: #fff;
@@ -51,12 +167,422 @@ main {
   padding: 16px;
 }
 .pane {
+=======
+/* ---------- sidebar ---------- */
+.sidebar {
+  width: 210px;
+  padding: 18px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  z-index: 5;
+  background: var(--hijau-tua);
+}
+.sidebar > button,
+.menu-item > button {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: transparent;
+  color: #f1e8d8;
+  border: 0;
+  border-radius: 8px;
+  font-size: 13.5px;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sidebar > button:hover,
+.menu-item > button:hover {
+  background: rgba(241, 232, 216, 0.12);
+}
+.sidebar > button.active,
+.menu-item > button.active {
+  background: var(--khaki);
+  font-weight: 600;
+}
+.icon {
+  width: 18px;
+  height: 18px;
+  flex: none;
+  fill: none;
+  stroke: #f1e8d8;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* dropdown File */
+.menu-item {
+  position: relative;
+}
+.dropdown {
+  display: none;
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 8px;
+  width: 150px;
+  padding: 6px 0;
+  z-index: 20;
+  background: var(--krem-muda);
+  border: 1px solid var(--pasir);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(47, 43, 34, 0.25);
+}
+.dropdown.show {
+  display: block;
+}
+.dropdown button,
+.dropdown a {
+  display: block;
+  width: 100%;
+  padding: 8px 14px;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-size: 12px;
+  color: var(--teks);
+  text-decoration: none;
+  cursor: pointer;
+}
+.dropdown button:hover,
+.dropdown a:hover {
+  background: var(--tan);
+}
+.dropdown hr {
+  border: 0;
+  border-top: 1px solid var(--pasir);
+  margin: 4px 14px;
+}
+.dropdown .exit {
+  color: #a23b2e;
+}
+
+/* ---------- area kerja ---------- */
+.workspace {
   flex: 1;
+  min-width: 0;
+  padding: 20px;
+  background: var(--krem);
+  border-radius: 20px 0 0 0;
+  display: flex;
+}
+.view {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.hidden {
+  display: none !important;
+}
+
+/* halaman awal */
+.open-area {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--krem-muda);
+  color: var(--teks-2);
+  border: 2px dashed var(--hijau);
+  border-radius: 20px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.open-area:hover {
+  background: var(--tan);
+}
+.open-area img {
+  display: none;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+/* ---------- ribbon Basic Ops ---------- */
+.ribbon {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+.rcard {
+  min-width: 128px;
+  background: var(--krem-muda);
+  border: 1px solid var(--pasir);
+  border-radius: 12px;
+  overflow: hidden;
+  padding-bottom: 6px;
+  flex: none;
+}
+.rcard h4 {
+  margin: 0 0 4px;
+  padding: 8px 10px;
+  text-align: center;
+  font: 600 13px "Playfair Display", Georgia, serif;
+  background: var(--tan);
+  color: var(--hijau-tua);
+}
+.rcard button {
+  display: block;
+  width: 100%;
+  padding: 5px 14px;
+  background: none;
+  border: 0;
+  text-align: left;
+  font-size: 12px;
+  color: var(--teks);
+  cursor: pointer;
+}
+.rcard button:hover {
+  background: var(--krem);
+}
+.rcard button.sel {
+  background: var(--hijau);
+  color: #f1e8d8;
+}
+
+/* ---------- panel gambar dan histogram ---------- */
+.panels {
+  flex: 1;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 14px;
+}
+.panel {
+  background: var(--krem-muda);
+  border: 1px solid var(--pasir);
+  border-radius: 16px;
+  padding: 14px;
+  min-height: 0;
+  display: flex;
+  gap: 14px;
+}
+.panel h4 {
+  margin: 0;
+  font: 600 15px "Playfair Display", Georgia, serif;
+  color: var(--hijau-tua);
+}
+.panel header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.badge {
+  padding: 3px 10px;
+  border-radius: 6px;
+  background: var(--hijau);
+  color: #f1e8d8;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.imgbox {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.frame-wrap {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: flex-start;
+}
+/* Bingkai memakai rasio gambar (--ratio diisi dari JavaScript), dan gambar
+   di dalamnya object-fit: cover, jadi selalu memenuhi bingkai. */
+.canvas {
+  position: relative;
+  width: 100%;
+  max-height: 100%;
+  aspect-ratio: var(--ratio, 4 / 3);
+  background: var(--tan);
+  border: 1px solid var(--pasir);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.canvas img {
+  display: none;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.canvas .kosong {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--teks-2);
+}
+
+.info,
+.stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px 12px;
+  margin: 0;
+  font-size: 11.5px;
+  color: var(--teks-2);
+}
+.info dd,
+.stats dd {
+  margin: 0;
+  color: var(--teks);
+  font-weight: 600;
+}
+.stats {
+  grid-template-columns: auto 1fr auto 1fr;
+}
+
+.histo {
+  flex-direction: column;
+  gap: 10px;
+}
+.histo select {
+  padding: 4px 8px;
+  border: 1px solid var(--pasir);
+  border-radius: 8px;
+  background: var(--krem);
+  color: var(--teks);
+  font-size: 12px;
+}
+.hist-wrap {
+  position: relative;
+  flex: 1;
+  min-height: 120px;
+  background: var(--krem);
+  border: 1px solid var(--pasir);
+  border-radius: 8px;
+}
+.hist-wrap canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* ---------- bar parameter ---------- */
+.params {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 18px;
+  background: var(--krem-muda);
+  border: 1px solid var(--pasir);
+  border-radius: 16px;
+}
+.p-name {
+  display: flex;
+  flex-direction: column;
+  min-width: 130px;
+}
+.p-name strong {
+  font: 600 15px "Playfair Display", Georgia, serif;
+  color: var(--hijau-tua);
+}
+.p-name small {
+  color: var(--teks-2);
+  margin-top: 2px;
+}
+.p-box {
+>>>>>>> Stashed changes
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 28px;
+  align-items: flex-end;
+}
+.p-item {
+  flex: 1;
+  min-width: 170px;
   display: flex;
   flex-direction: column;
 }
+<<<<<<< Updated upstream
 .box {
   flex: 1;
   border: 2px dashed #7b8794;
   background: #fff;
+=======
+.p-item label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.p-item input[type="range"] {
+  width: 100%;
+  accent-color: var(--hijau);
+}
+.p-item select {
+  padding: 6px 8px;
+  border: 1px solid var(--pasir);
+  border-radius: 8px;
+  background: var(--krem);
+  color: var(--teks);
+  font-size: 12px;
+}
+.tanpa {
+  font-size: 12px;
+  color: var(--teks-2);
+}
+.p-actions {
+  display: flex;
+  gap: 10px;
+}
+.p-actions button {
+  padding: 9px 22px;
+  background: var(--tan);
+  color: var(--teks);
+  border: 0;
+  border-radius: 8px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.p-actions button:hover {
+  background: var(--pasir);
+}
+.p-actions .primary {
+  background: var(--hijau);
+  color: #f1e8d8;
+}
+.p-actions .primary:hover {
+  background: var(--hijau-tua);
+}
+
+/* pesan singkat di bawah layar */
+#toast {
+  position: fixed;
+  left: 50%;
+  bottom: 56px;
+  transform: translateX(-50%);
+  padding: 10px 18px;
+  background: var(--teks);
+  color: var(--krem-muda);
+  border-radius: 999px;
+  font-size: 12px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  z-index: 30;
+}
+#toast.show {
+  opacity: 1;
+>>>>>>> Stashed changes
 }
