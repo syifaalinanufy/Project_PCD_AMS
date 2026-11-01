@@ -34,7 +34,7 @@
         <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
         Basic Ops
       </button>
-      <button>
+      <button id="enhBtn">
         <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>
         Enhancement
       </button>
@@ -113,15 +113,95 @@
           </div>
         </div>
 
+        <div class="ops-panels" id="opsPanels">
+          <div id="opsBoxAsli">
+            <h4>Gambar Asli</h4>
+            <div class="canvas"><img id="imgAsli" alt=""></div>
+          </div>
+          <div id="opsBoxHasil">
+            <h4>Gambar Hasil</h4>
+            <div class="canvas"><img id="imgHasil" alt=""></div>
+          </div>
+          <div id="opsBoxB">
+            <h4>Gambar B</h4>
+            <div class="canvas"><img id="imgBPreview" alt=""></div>
+          </div>
+          <div id="opsBoxHisto">
+            <h4>Histogram</h4>
+            <div class="canvas"></div>
+          </div>
+        </div>
+
+        <div class="params">
+          <div class="p-name">
+            <strong>Parameter</strong>
+            <small id="opName">Pilih operasi</small>
+          </div>
+          <div class="p-mode-toggle hidden" id="opsModeToggle">
+            <button type="button" class="mode-btn active" data-mode="scalar">Skalar</button>
+            <button type="button" class="mode-btn" data-mode="image">Citra Lain</button>
+          </div>
+          <div class="p-slider" id="opsSliderWrap">
+            <label for="nilai"><span id="nilaiLabel">Nilai Konstanta</span> <b id="nilaiVal">50</b></label>
+            <input type="range" id="nilai" min="0" max="100" value="50">
+          </div>
+          <div class="p-noparam hidden" id="opsNoParam">Operasi ini tidak memerlukan parameter.</div>
+          <div class="p-dualimage hidden" id="opsDualImage">
+            <span class="p-dualimage-label">Gambar B</span>
+            <button type="button" id="opsImgBBtn">Pilih gambar...</button>
+            <span id="opsImgBName">belum ada gambar</span>
+          </div>
+          <div class="p-actions">
+            <button class="primary">Terapkan</button>
+            <button>Undo</button>
+            <button>Reset</button>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- Tampilan Enhancement -->
+      <section id="enhView" class="view hidden">
+
+        <div class="ribbon" id="enhRibbon">
+          <div class="rcard">
+            <h4>Enhancement</h4>
+            <button>Brightness</button>
+            <button>Contrast</button>
+            <button>Hist. Equalization</button>
+            <button>Geometrics correction</button>
+          </div>
+          <div class="rcard">
+            <h4>Smoothing Spatial</h4>
+            <button>Lowpass Filtering</button>
+            <button>Median Filtering</button>
+          </div>
+          <div class="rcard">
+            <h4>Smoothing Frequency</h4>
+            <button>ILPF</button>
+            <button>BLPF</button>
+          </div>
+          <div class="rcard">
+            <h4>Sharpening Spatial</h4>
+            <button>Highpass Filtering</button>
+            <button>Highboost Filtering</button>
+          </div>
+          <div class="rcard">
+            <h4>Sharpening Frequency</h4>
+            <button>IHPF</button>
+            <button>BHPF</button>
+          </div>
+        </div>
+
         <div class="panels">
           <div class="panel images">
             <div class="imgbox">
               <h4>Gambar Asli</h4>
-              <div class="canvas"><img id="imgAsli" alt=""></div>
+              <div class="canvas"><img id="enhImgAsli" alt=""></div>
             </div>
             <div class="imgbox">
               <h4>Gambar Hasil</h4>
-              <div class="canvas"><img id="imgHasil" alt=""></div>
+              <div class="canvas"><img id="enhImgHasil" alt=""></div>
             </div>
           </div>
           <div class="panel histo">
@@ -133,12 +213,13 @@
         <div class="params">
           <div class="p-name">
             <strong>Parameter</strong>
-            <small id="opName">Pilih operasi</small>
+            <small id="enhOpName">Brightness</small>
           </div>
-          <div class="p-slider">
-            <label for="nilai">Nilai Konstanta <b id="nilaiVal">50</b></label>
-            <input type="range" id="nilai" min="0" max="100" value="50">
+          <div class="p-slider" id="enhSliderWrap">
+            <label for="enhNilai"><span id="enhNilaiLabel">Nilai Kecerahan</span> <b id="enhNilaiVal">50</b></label>
+            <input type="range" id="enhNilai" min="0" max="100" value="50">
           </div>
+          <div class="p-noparam hidden" id="enhNoParam">Operasi ini tidak memerlukan parameter.</div>
           <div class="p-actions">
             <button class="primary">Terapkan</button>
             <button>Undo</button>
@@ -152,13 +233,23 @@
 
   <footer>PicForge-copyright © kelompok -(tahun)</footer>
   <input type="file" id="fileInput" accept="image/*" hidden>
+  <input type="file" id="opsImgBInput" accept="image/*" hidden>
 
   <script>
     const $ = (s) => document.querySelector(s);
     let imgURL = null;
 
-    const fileBtn = $("#fileBtn"), fileMenu = $("#fileMenu"), basicBtn = $("#basicBtn");
-    const homeView = $("#homeView"), opsView = $("#opsView");
+    const fileBtn = $("#fileBtn"), fileMenu = $("#fileMenu"), basicBtn = $("#basicBtn"), enhBtn = $("#enhBtn");
+    const homeView = $("#homeView"), opsView = $("#opsView"), enhView = $("#enhView");
+    const allViews = [homeView, opsView, enhView];
+    const allNavButtons = [basicBtn, enhBtn];
+
+    function showView(view, btn) {
+      allViews.forEach((v) => v.classList.add("hidden"));
+      allNavButtons.forEach((b) => b.classList.remove("active"));
+      view.classList.remove("hidden");
+      btn.classList.add("active");
+    }
 
     /* dropdown File */
     function closeMenu() { fileMenu.classList.remove("show"); fileBtn.classList.remove("active"); }
@@ -186,23 +277,142 @@
     });
 
     /* pindah tampilan */
-    basicBtn.addEventListener("click", () => {
-      homeView.classList.add("hidden");
-      opsView.classList.remove("hidden");
-      basicBtn.classList.add("active");
+    basicBtn.addEventListener("click", () => showView(opsView, basicBtn));
+    enhBtn.addEventListener("click", () => showView(enhView, enhBtn));
+
+    /* konfigurasi parameter tiap operasi: null = tidak butuh parameter */
+    const opsParamConfig = {
+      "Negative": null,
+      "Thresholding": { label: "Nilai Ambang", min: 0, max: 255, value: 128 },
+      "Convolution": null,
+      "Fourier Transform": null,
+      "Add (+)": { type: "arith", label: "Nilai Konstanta", min: 0, max: 100, value: 50 },
+      "Subtract (-)": { type: "arith", label: "Nilai Konstanta", min: 0, max: 100, value: 50 },
+      "Multiply (x)": { type: "arith", label: "Faktor Pengali (%)", min: 0, max: 300, value: 100 },
+      "Divide (÷)": { type: "arith", label: "Faktor Pembagi (%)", min: 0, max: 300, value: 100 },
+      "NOT": null, "AND": "DUAL", "OR": "DUAL", "XOR": "DUAL",
+      "Translation": { label: "Pergeseran (px)", min: -100, max: 100, value: 0 },
+      "Rotation": { label: "Sudut Rotasi (°)", min: 0, max: 360, value: 0 },
+      "Zooming": { label: "Faktor Zoom (%)", min: 10, max: 300, value: 100 },
+      "Flipping": null,
+      "Cropping": null,
+      "Binary": null, "Grayscale": null, "RGB": null, "HSV": null,
+      "CMY": null, "YUV": null, "YIQ": null, "Pseudo": null,
+    };
+
+    const enhParamConfig = {
+      "Brightness": { label: "Nilai Kecerahan", min: 0, max: 100, value: 50 },
+      "Contrast": { label: "Nilai Kontras", min: 0, max: 100, value: 50 },
+      "Hist. Equalization": null,
+      "Geometrics correction": null,
+      "Lowpass Filtering": { label: "Ukuran Kernel", min: 3, max: 15, value: 3 },
+      "Median Filtering": { label: "Ukuran Kernel", min: 3, max: 15, value: 3 },
+      "ILPF": { label: "Radius Cutoff", min: 0, max: 100, value: 30 },
+      "BLPF": { label: "Radius Cutoff", min: 0, max: 100, value: 30 },
+      "Highpass Filtering": { label: "Ukuran Kernel", min: 3, max: 15, value: 3 },
+      "Highboost Filtering": { label: "Ukuran Kernel", min: 3, max: 15, value: 3 },
+      "IHPF": { label: "Radius Cutoff", min: 0, max: 100, value: 30 },
+      "BHPF": { label: "Radius Cutoff", min: 0, max: 100, value: 30 },
+    };
+
+    /* terapkan konfigurasi parameter: slider biasa / dual-image wajib / arith (skalar ATAU citra lain) / tanpa parameter */
+    function applyParamConfig(config, els) {
+      els.sliderWrap.classList.add("hidden");
+      els.noParam.classList.add("hidden");
+      if (els.dualWrap) els.dualWrap.classList.add("hidden");
+      if (els.modeToggle) els.modeToggle.classList.add("hidden");
+      if (els.panelsGrid) els.panelsGrid.classList.remove("dual-mode");
+
+      if (config === "DUAL") {
+        els.dualWrap.classList.remove("hidden");
+        if (els.panelsGrid) els.panelsGrid.classList.add("dual-mode");
+
+      } else if (config && config.type === "arith") {
+        els.modeToggle.classList.remove("hidden");
+        els.label.textContent = config.label;
+        els.slider.min = config.min;
+        els.slider.max = config.max;
+        els.slider.value = config.value;
+        els.val.textContent = config.value;
+        // reset ke mode "Skalar" tiap ganti operasi
+        els.modeToggle.querySelectorAll(".mode-btn").forEach((m) => m.classList.remove("active"));
+        els.modeToggle.querySelector('[data-mode="scalar"]').classList.add("active");
+        els.sliderWrap.classList.remove("hidden");
+
+      } else if (config) {
+        els.sliderWrap.classList.remove("hidden");
+        els.label.textContent = config.label;
+        els.slider.min = config.min;
+        els.slider.max = config.max;
+        els.slider.value = config.value;
+        els.val.textContent = config.value;
+
+      } else {
+        els.noParam.classList.remove("hidden");
+      }
+    }
+
+    /* pilih operasi di ribbon Basic Ops */
+    const opsEls = {
+      sliderWrap: $("#opsSliderWrap"), noParam: $("#opsNoParam"),
+      label: $("#nilaiLabel"), slider: $("#nilai"), val: $("#nilaiVal"),
+      dualWrap: $("#opsDualImage"), modeToggle: $("#opsModeToggle"),
+      panelsGrid: $("#opsPanels"),
+    };
+
+    /* klik toggle Skalar / Citra Lain (khusus operasi arith) */
+    opsEls.modeToggle.querySelectorAll(".mode-btn").forEach((m) => {
+      m.addEventListener("click", () => {
+        opsEls.modeToggle.querySelectorAll(".mode-btn").forEach((x) => x.classList.remove("active"));
+        m.classList.add("active");
+        if (m.dataset.mode === "scalar") {
+          opsEls.sliderWrap.classList.remove("hidden");
+          opsEls.dualWrap.classList.add("hidden");
+          opsEls.panelsGrid.classList.remove("dual-mode");
+        } else {
+          opsEls.sliderWrap.classList.add("hidden");
+          opsEls.dualWrap.classList.remove("hidden");
+          opsEls.panelsGrid.classList.add("dual-mode");
+        }
+      });
     });
 
-    /* pilih operasi di ribbon */
+    /* upload Gambar B untuk AND/OR/XOR dan mode "Citra Lain" di Arithmetic */
+    $("#opsImgBBtn").addEventListener("click", () => $("#opsImgBInput").click());
+    $("#opsImgBInput").addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      $("#opsImgBName").textContent = f.name;
+      const url = URL.createObjectURL(f);
+      $("#imgBPreview").src = url;
+      $("#imgBPreview").style.display = "block";
+    });
     document.querySelectorAll("#ribbon button").forEach((b) => {
       b.addEventListener("click", () => {
         document.querySelectorAll("#ribbon button").forEach((x) => x.classList.remove("sel"));
         b.classList.add("sel");
         $("#opName").textContent = b.textContent;
+        applyParamConfig(opsParamConfig[b.textContent], opsEls);
+      });
+    });
+
+    /* pilih operasi di ribbon Enhancement */
+    const enhEls = {
+      sliderWrap: $("#enhSliderWrap"), noParam: $("#enhNoParam"),
+      label: $("#enhNilaiLabel"), slider: $("#enhNilai"), val: $("#enhNilaiVal"),
+    };
+    document.querySelectorAll("#enhRibbon button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#enhRibbon button").forEach((x) => x.classList.remove("sel"));
+        b.classList.add("sel");
+        $("#enhOpName").textContent = b.textContent;
+        applyParamConfig(enhParamConfig[b.textContent], enhEls);
       });
     });
 
     /* slider */
     $("#nilai").addEventListener("input", (e) => { $("#nilaiVal").textContent = e.target.value; });
+    $("#enhNilai").addEventListener("input", (e) => { $("#enhNilaiVal").textContent = e.target.value; });
   </script>
 </body>
 </html>
