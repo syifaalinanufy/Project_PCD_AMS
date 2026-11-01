@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PicForge</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body class="landing">
+
+<main class="hero">
+<div class="text">
+      <h1>PicForge</h1>
+      <p>Ubah gambar, temukan makna dalam setiap piksel.</p>
+      <a href="{{ url_for('editor') }}" class="btn-start">Masuk</a>  
+  </div>
+
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/pcdlogo.png') }}" alt="Logo kelompok">
+    </div>
+</main>
+    
+  
+
+  <footer>PictForge © kelompok AMS-(2026)</footer>
+</body>
+</html>

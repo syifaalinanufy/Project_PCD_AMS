@@ -2,27 +2,207 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Nama Aplikasi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PicForge</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-  <header>Nama Aplikasi — Copyright © Nama Tim (Tahun)</header>
+<body class="app">
 
   <div class="layout">
+
+    <!-- SIDEBAR -->
     <aside class="sidebar">
-      <button>File</button>
-      <button>Basic Ops</button>
-      <button>Enhancement</button>
-      <button>Noise</button>
-      <button>Edge Detection</button>
-      <button>Segmentation</button>
-      <button>About</button>
+
+      <div class="menu-item">
+        <button id="fileBtn">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+          File
+        </button>
+        <div id="fileMenu" class="dropdown">
+          <button id="openBtn">Open...</button>
+          <button>Save</button>
+          <button>Save As...</button>
+          <hr>
+          <a href="{{ url_for('landing') }}" class="exit">Exit</a>
+        </div>
+      </div>
+
+      <button id="basicBtn">
+        <svg class="icon" viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+        Basic Ops
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M12 3l2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>
+        Enhancement
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="6" cy="7" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="18" cy="8" r="1"/><circle cx="8" cy="13" r="1"/><circle cx="15" cy="14" r="1"/><circle cx="5" cy="19" r="1"/><circle cx="12" cy="19" r="1"/><circle cx="19" cy="18" r="1"/></svg>
+        Noise
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" stroke-dasharray="3 3"/></svg>
+        Edge Detection
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><path d="M3 3h8v8H3zM13 3h8v8h-8zM3 13h8v8H3zM13 13h8v8h-8z"/></svg>
+        Segmentation
+      </button>
+      <button>
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8v.01"/></svg>
+        About
+      </button>
     </aside>
 
-    <main>
-      <div class="pane"><h3>Citra Asli</h3><div class="box"></div></div>
-      <div class="pane"><h3>Citra Hasil</h3><div class="box"></div></div>
+    <!-- AREA UTAMA -->
+    <main class="workspace">
+
+      <!-- Tampilan Homepage -->
+      <section id="homeView" class="view">
+        <div id="openArea" class="open-area">
+          <span id="placeholder">Open file</span>
+          <img id="preview" alt="Citra">
+        </div>
+      </section>
+
+      <!-- Tampilan Basic Ops -->
+      <section id="opsView" class="view hidden">
+
+        <div class="ribbon" id="ribbon">
+          <div class="rcard">
+            <h4>Basic Ops</h4>
+            <button>Negative</button>
+            <button>Thresholding</button>
+            <button>Convolution</button>
+            <button>Fourier Transform</button>
+          </div>
+          <div class="rcard">
+            <h4>Arithmetic</h4>
+            <button>Add (+)</button>
+            <button>Subtract (-)</button>
+            <button>Multiply (x)</button>
+            <button>Divide (÷)</button>
+          </div>
+          <div class="rcard">
+            <h4>Boolean</h4>
+            <button>NOT</button>
+            <button>AND</button>
+            <button>OR</button>
+            <button>XOR</button>
+          </div>
+          <div class="rcard">
+            <h4>Geometrics</h4>
+            <button>Translation</button>
+            <button>Rotation</button>
+            <button>Zooming</button>
+            <button>Flipping</button>
+            <button>Cropping</button>
+          </div>
+          <div class="rcard">
+            <h4>Colouring</h4>
+            <button>Binary</button>
+            <button>Grayscale</button>
+            <button>RGB</button>
+            <button>HSV</button>
+            <button>CMY</button>
+            <button>YUV</button>
+            <button>YIQ</button>
+            <button>Pseudo</button>
+          </div>
+        </div>
+
+        <div class="panels">
+          <div class="panel images">
+            <div class="imgbox">
+              <h4>Gambar Asli</h4>
+              <div class="canvas"><img id="imgAsli" alt=""></div>
+            </div>
+            <div class="imgbox">
+              <h4>Gambar Hasil</h4>
+              <div class="canvas"><img id="imgHasil" alt=""></div>
+            </div>
+          </div>
+          <div class="panel histo">
+            <h4>Histogram</h4>
+            <div class="canvas"></div>
+          </div>
+        </div>
+
+        <div class="params">
+          <div class="p-name">
+            <strong>Parameter</strong>
+            <small id="opName">Pilih operasi</small>
+          </div>
+          <div class="p-slider">
+            <label for="nilai">Nilai Konstanta <b id="nilaiVal">50</b></label>
+            <input type="range" id="nilai" min="0" max="100" value="50">
+          </div>
+          <div class="p-actions">
+            <button class="primary">Terapkan</button>
+            <button>Undo</button>
+            <button>Reset</button>
+          </div>
+        </div>
+
+      </section>
     </main>
   </div>
+
+  <footer>PicForge-copyright © kelompok -(tahun)</footer>
+  <input type="file" id="fileInput" accept="image/*" hidden>
+
+  <script>
+    const $ = (s) => document.querySelector(s);
+    let imgURL = null;
+
+    const fileBtn = $("#fileBtn"), fileMenu = $("#fileMenu"), basicBtn = $("#basicBtn");
+    const homeView = $("#homeView"), opsView = $("#opsView");
+
+    /* dropdown File */
+    function closeMenu() { fileMenu.classList.remove("show"); fileBtn.classList.remove("active"); }
+    fileBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      fileMenu.classList.toggle("show");
+      fileBtn.classList.toggle("active");
+    });
+    document.addEventListener("click", closeMenu);
+
+    /* buka file */
+    const openFile = () => $("#fileInput").click();
+    $("#openBtn").addEventListener("click", openFile);
+    $("#openArea").addEventListener("click", () => { if (!imgURL) openFile(); });
+
+    $("#fileInput").addEventListener("change", (e) => {
+      const f = e.target.files[0];
+      if (!f) return;
+      imgURL = URL.createObjectURL(f);
+      $("#preview").src = imgURL;
+      $("#preview").style.display = "block";
+      $("#placeholder").style.display = "none";
+      $("#imgAsli").src = imgURL;
+      $("#imgAsli").style.display = "block";
+    });
+
+    /* pindah tampilan */
+    basicBtn.addEventListener("click", () => {
+      homeView.classList.add("hidden");
+      opsView.classList.remove("hidden");
+      basicBtn.classList.add("active");
+    });
+
+    /* pilih operasi di ribbon */
+    document.querySelectorAll("#ribbon button").forEach((b) => {
+      b.addEventListener("click", () => {
+        document.querySelectorAll("#ribbon button").forEach((x) => x.classList.remove("sel"));
+        b.classList.add("sel");
+        $("#opName").textContent = b.textContent;
+      });
+    });
+
+    /* slider */
+    $("#nilai").addEventListener("input", (e) => { $("#nilaiVal").textContent = e.target.value; });
+  </script>
 </body>
 </html>
