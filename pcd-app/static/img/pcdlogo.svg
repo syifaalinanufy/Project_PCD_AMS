@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#5a6340"/>
+      <stop offset="1" stop-color="#363a25"/>
+    </linearGradient>
+    <radialGradient id="smooth" cx="0.65" cy="0.38" r="0.8">
+      <stop offset="0" stop-color="#fbf3df"/>
+      <stop offset="0.55" stop-color="#d8c79f"/>
+      <stop offset="1" stop-color="#7a6d4a"/>
+    </radialGradient>
+    <clipPath id="lensL"><rect x="0" y="0" width="256" height="512"/></clipPath>
+    <clipPath id="lensR"><rect x="256" y="0" width="256" height="512"/></clipPath>
+    <clipPath id="lens"><circle cx="256" cy="256" r="138"/></clipPath>
+  </defs>
+  <rect width="512" height="512" rx="112" fill="url(#bg)"/>
+  <rect x="14" y="14" width="484" height="484" rx="98" fill="none" stroke="#8a7a55" stroke-opacity=".55" stroke-width="2"/>
+  <g clip-path="url(#lens)">
+    <circle cx="256" cy="256" r="138" fill="#2f3220"/>
+    <g clip-path="url(#lensR)"><circle cx="256" cy="256" r="138" fill="url(#smooth)"/></g>
+    <g clip-path="url(#lensL)">
+    <rect x="114" y="112" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="135" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="158" width="21.5" height="21.5" rx="2" fill="rgb(77, 80, 57)"/>
+    <rect x="114" y="181" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="204" width="21.5" height="21.5" rx="2" fill="rgb(72, 75, 51)"/>
+    <rect x="114" y="227" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="250" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="273" width="21.5" height="21.5" rx="2" fill="rgb(73, 77, 53)"/>
+    <rect x="114" y="296" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="319" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="342" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="365" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="114" y="388" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="137" y="112" width="21.5" height="21.5" rx="2" fill="rgb(88, 90, 67)"/>
+    <rect x="137" y="135" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="137" y="158" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="137" y="181" width="21.5" height="21.5" rx="2" fill="rgb(90, 92, 68)"/>
+    <rect x="137" y="204" width="21.5" height="21.5" rx="2" fill="rgb(120, 119, 96)"/>
+    <rect x="137" y="227" width="21.5" height="21.5" rx="2" fill="rgb(103, 104, 81)"/>
+    <rect x="137" y="250" width="21.5" height="21.5" rx="2" fill="rgb(93, 95, 72)"/>
+    <rect x="137" y="273" width="21.5" height="21.5" rx="2" fill="rgb(125, 124, 101)"/>
+    <rect x="137" y="296" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="137" y="319" width="21.5" height="21.5" rx="2" fill="rgb(97, 99, 76)"/>
+    <rect x="137" y="342" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="137" y="365" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="137" y="388" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="160" y="112" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="160" y="135" width="21.5" height="21.5" rx="2" fill="rgb(87, 90, 66)"/>
+    <rect x="160" y="158" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="160" y="181" width="21.5" height="21.5" rx="2" fill="rgb(107, 107, 84)"/>
+    <rect x="160" y="204" width="21.5" height="21.5" rx="2" fill="rgb(123, 122, 99)"/>
+    <rect x="160" y="227" width="21.5" height="21.5" rx="2" fill="rgb(114, 114, 91)"/>
+    <rect x="160" y="250" width="21.5" height="21.5" rx="2" fill="rgb(127, 125, 103)"/>
+    <rect x="160" y="273" width="21.5" height="21.5" rx="2" fill="rgb(92, 94, 71)"/>
+    <rect x="160" y="296" width="21.5" height="21.5" rx="2" fill="rgb(82, 85, 61)"/>
+    <rect x="160" y="319" width="21.5" height="21.5" rx="2" fill="rgb(77, 80, 56)"/>
+    <rect x="160" y="342" width="21.5" height="21.5" rx="2" fill="rgb(88, 91, 67)"/>
+    <rect x="160" y="365" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="160" y="388" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="183" y="112" width="21.5" height="21.5" rx="2" fill="rgb(73, 77, 53)"/>
+    <rect x="183" y="135" width="21.5" height="21.5" rx="2" fill="rgb(78, 81, 57)"/>
+    <rect x="183" y="158" width="21.5" height="21.5" rx="2" fill="rgb(89, 91, 68)"/>
+    <rect x="183" y="181" width="21.5" height="21.5" rx="2" fill="rgb(138, 135, 113)"/>
+    <rect x="183" y="204" width="21.5" height="21.5" rx="2" fill="rgb(148, 144, 122)"/>
+    <rect x="183" y="227" width="21.5" height="21.5" rx="2" fill="rgb(130, 128, 106)"/>
+    <rect x="183" y="250" width="21.5" height="21.5" rx="2" fill="rgb(152, 148, 127)"/>
+    <rect x="183" y="273" width="21.5" height="21.5" rx="2" fill="rgb(143, 140, 118)"/>
+    <rect x="183" y="296" width="21.5" height="21.5" rx="2" fill="rgb(151, 148, 126)"/>
+    <rect x="183" y="319" width="21.5" height="21.5" rx="2" fill="rgb(125, 124, 102)"/>
+    <rect x="183" y="342" width="21.5" height="21.5" rx="2" fill="rgb(79, 82, 58)"/>
+    <rect x="183" y="365" width="21.5" height="21.5" rx="2" fill="rgb(100, 101, 78)"/>
+    <rect x="183" y="388" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="206" y="112" width="21.5" height="21.5" rx="2" fill="rgb(68, 72, 48)"/>
+    <rect x="206" y="135" width="21.5" height="21.5" rx="2" fill="rgb(107, 107, 84)"/>
+    <rect x="206" y="158" width="21.5" height="21.5" rx="2" fill="rgb(92, 94, 71)"/>
+    <rect x="206" y="181" width="21.5" height="21.5" rx="2" fill="rgb(134, 132, 110)"/>
+    <rect x="206" y="204" width="21.5" height="21.5" rx="2" fill="rgb(126, 124, 102)"/>
+    <rect x="206" y="227" width="21.5" height="21.5" rx="2" fill="rgb(157, 144, 114)"/>
+    <rect x="206" y="250" width="21.5" height="21.5" rx="2" fill="rgb(170, 157, 129)"/>
+    <rect x="206" y="273" width="21.5" height="21.5" rx="2" fill="rgb(141, 128, 96)"/>
+    <rect x="206" y="296" width="21.5" height="21.5" rx="2" fill="rgb(143, 130, 98)"/>
+    <rect x="206" y="319" width="21.5" height="21.5" rx="2" fill="rgb(113, 113, 90)"/>
+    <rect x="206" y="342" width="21.5" height="21.5" rx="2" fill="rgb(115, 114, 92)"/>
+    <rect x="206" y="365" width="21.5" height="21.5" rx="2" fill="rgb(86, 88, 65)"/>
+    <rect x="206" y="388" width="21.5" height="21.5" rx="2" fill="rgb(73, 76, 53)"/>
+    <rect x="229" y="112" width="21.5" height="21.5" rx="2" fill="rgb(70, 74, 50)"/>
+    <rect x="229" y="135" width="21.5" height="21.5" rx="2" fill="rgb(118, 117, 94)"/>
+    <rect x="229" y="158" width="21.5" height="21.5" rx="2" fill="rgb(148, 144, 123)"/>
+    <rect x="229" y="181" width="21.5" height="21.5" rx="2" fill="rgb(142, 139, 118)"/>
+    <rect x="229" y="204" width="21.5" height="21.5" rx="2" fill="rgb(155, 142, 112)"/>
+    <rect x="229" y="227" width="21.5" height="21.5" rx="2" fill="rgb(133, 120, 87)"/>
+    <rect x="229" y="250" width="21.5" height="21.5" rx="2" fill="rgb(197, 184, 159)"/>
+    <rect x="229" y="273" width="21.5" height="21.5" rx="2" fill="rgb(169, 157, 128)"/>
+    <rect x="229" y="296" width="21.5" height="21.5" rx="2" fill="rgb(168, 155, 126)"/>
+    <rect x="229" y="319" width="21.5" height="21.5" rx="2" fill="rgb(153, 149, 127)"/>
+    <rect x="229" y="342" width="21.5" height="21.5" rx="2" fill="rgb(96, 97, 74)"/>
+    <rect x="229" y="365" width="21.5" height="21.5" rx="2" fill="rgb(78, 81, 58)"/>
+    <rect x="229" y="388" width="21.5" height="21.5" rx="2" fill="rgb(78, 81, 58)"/>
+    </g>
+    <line x1="256" y1="118" x2="256" y2="394" stroke="#f6eedd" stroke-width="3" stroke-opacity=".7"/>
+  </g>
+  <circle cx="256" cy="256" r="147" fill="none" stroke="#f1e8d8" stroke-width="14"/>
+  <circle cx="256" cy="256" r="166" fill="none" stroke="#c9b98f" stroke-opacity=".55" stroke-width="3"/>
+  <!-- percikan "forge" -->
+  <path d="M404 92 L414 124 L446 134 L414 144 L404 176 L394 144 L362 134 L394 124 Z" fill="#f6eedd"/>
+  <path d="M120 372 L125 388 L141 393 L125 398 L120 414 L115 398 L99 393 L115 388 Z" fill="#cbb98f"/>
+  <!-- kilau lensa -->
+  <ellipse cx="318" cy="196" rx="26" ry="14" transform="rotate(-35 318 196)" fill="#fff" fill-opacity=".55"/>
+</svg>
