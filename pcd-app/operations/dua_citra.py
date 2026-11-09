@@ -1,13 +1,3 @@
-"""
-Operasi Basic Ops yang bisa memakai citra kedua (Gambar B).
-
-- Arithmetic (Add, Subtract, Multiply, Divide): OPSIONAL. Tanpa Gambar B
-  memakai nilai skala dari basic_ops.py; dengan Gambar B dihitung per piksel.
-- Boolean (AND, OR, XOR): WAJIB dua gambar.
-
-File ini memakai ulang fungsi bantu dari basic_ops.py tanpa mengubahnya.
-Pendaftaran di bawah menimpa versi lama di operations/__init__.py.
-"""
 import numpy as np
 from PIL import Image
 
@@ -16,7 +6,6 @@ from .basic_ops import ke_array, ke_citra
 
 
 def _samakan(citra_b, img):
-    """Ubah Gambar B ke RGB dan ukuran Gambar A agar bisa dihitung per piksel."""
     b = citra_b.convert("RGB")
     if b.size != img.size:
         b = b.resize(img.size, Image.Resampling.BICUBIC)
