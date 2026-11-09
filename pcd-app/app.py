@@ -4,7 +4,7 @@ import io
 from flask import Flask, jsonify, render_template, request
 from PIL import Image, ImageOps, UnidentifiedImageError
 
-import operations
+import operations 
 
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024      # batas upload 16 MB
