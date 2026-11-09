@@ -1,20 +1,15 @@
-"""Fungsi bantu bersama untuk Enhancement, Noise, Edge Detection, Segmentation.
-
-Semua memakai NumPy murni (tanpa OpenCV) supaya mudah dibaca dan dijelaskan.
-"""
 import numpy as np
 
 
 def _pad(a, ry, rx):
-    """Tambah tepi dengan cara memantulkan piksel (reflect), bekerja untuk 2D/3D."""
+   
     tambah = [(ry, ry), (rx, rx)] + [(0, 0)] * (a.ndim - 2)
     mode = "reflect" if min(a.shape[0], a.shape[1]) > max(ry, rx) else "edge"
     return np.pad(a, tambah, mode=mode)
 
 
 def konvolusi(a, kernel):
-    """Konvolusi 2D dengan kernel kecil (korelasi; kernel simetris/anti-simetris
-    sudah ditangani pemanggil). a: 2D atau 3D float."""
+   
     kernel = np.asarray(kernel, dtype=np.float32)
     kh, kw = kernel.shape
     ry, rx = kh // 2, kw // 2
@@ -30,7 +25,7 @@ def konvolusi(a, kernel):
 
 
 def konvolusi_pisah(a, k1d):
-    """Konvolusi terpisah: kernel 1D diterapkan ke baris lalu kolom (cepat)."""
+  
     k1d = np.asarray(k1d, dtype=np.float32)
     r = len(k1d) // 2
     p = _pad(a.astype(np.float32), r, r)
@@ -61,7 +56,7 @@ def blur_rata(a, ukuran):
 
 
 def normalisasi(a):
-    """Skalakan array ke 0..255 (untuk menampilkan magnitudo tepi)."""
+  
     mx = float(a.max())
     return a * (255.0 / mx) if mx > 0 else a
 
@@ -69,14 +64,13 @@ def normalisasi(a):
 # ---------- filter domain frekuensi ----------
 
 def jarak_frekuensi(h, w):
-    """Jarak tiap titik spektrum (sudah di-shift ke tengah) dari pusat."""
     v = np.arange(h, dtype=np.float32) - h // 2
     u = np.arange(w, dtype=np.float32) - w // 2
     return np.sqrt(v[:, None] ** 2 + u[None, :] ** 2)
 
 
 def filter_frekuensi(a, mask_fn):
-    """Terapkan filter H(D) pada tiap kanal lewat FFT. mask_fn menerima D."""
+    
     h, w = a.shape[:2]
     H = mask_fn(jarak_frekuensi(h, w)).astype(np.float32)
     kanal = [a] if a.ndim == 2 else [a[..., c] for c in range(a.shape[2])]
