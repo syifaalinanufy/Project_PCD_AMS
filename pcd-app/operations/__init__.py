@@ -1,6 +1,12 @@
 from .basic_ops import OPERASI as _BASIC_OPS
 from .dua_citra import DUA_CITRA
-from .histogram import hitung_histogram  
+from .enhancement import OPERASI as _ENH
+from .histogram import hitung_histogram
+
+#Akan ditambahkan nanti: edge, noise, segmentation
+#from .edge import OPERASI as _EDGE
+#from .noise import OPERASI as _NOISE
+#from .segmentation import OPERASI as _SEG
 
 # Basic Ops: operasi dengan dua citra berbeda (Add, AND, dst.)
 OPS = {**_BASIC_OPS, **DUA_CITRA}
@@ -8,9 +14,9 @@ OPS = {**_BASIC_OPS, **DUA_CITRA}
 GRUP = {
     "ops": OPS,
     "enh": _ENH,
-    "noise": _NOISE,
-    "edge": _EDGE,
-    "seg": _SEG,
+    #"noise": _NOISE,
+    #"edge": _EDGE,
+    #"seg": _SEG,
 }
 
 # Teks tombol di ribbon
