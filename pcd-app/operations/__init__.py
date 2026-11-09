@@ -1,5 +1,4 @@
 from .basic_ops import OPERASI as _BASIC_OPS
-from .dua_citra import DUA_CITRA
 from .enhancement import OPERASI as _ENH
 from .histogram import hitung_histogram
 
@@ -9,7 +8,7 @@ from .histogram import hitung_histogram
 #from .segmentation import OPERASI as _SEG
 
 # Basic Ops: operasi dengan dua citra berbeda (Add, AND, dst.)
-OPS = {**_BASIC_OPS, **DUA_CITRA}
+OPS = _BASIC_OPS
 
 GRUP = {
     "ops": OPS,

@@ -90,60 +90,59 @@ def fourier_transform(img, tampilan="Spektrum magnitudo"):
 
 # ---------------------- Arithmetic ----------------------
 
-def add(img, nilai=50):
-    return ke_citra(ke_array(img) + nilai)
+def _samakan(citra_b, img):
+    """Ubah Gambar B ke RGB dan ukuran Gambar A agar bisa dihitung per piksel."""
+    b = citra_b.convert("RGB")
+    if b.size != img.size:
+        b = b.resize(img.size, Image.Resampling.BICUBIC)
+    return b
 
 
-def subtract(img, nilai=50):
-    return ke_citra(ke_array(img) - nilai)
+def add(img, nilai=50, citra_b=None):
+    if citra_b is None:
+        return ke_citra(ke_array(img) + nilai)
+    return ke_citra(ke_array(img) + ke_array(_samakan(citra_b, img)))
 
 
-def multiply(img, faktor=1.5):
-    return ke_citra(ke_array(img) * faktor)
+def subtract(img, nilai=50, citra_b=None):
+    if citra_b is None:
+        return ke_citra(ke_array(img) - nilai)
+    return ke_citra(ke_array(img) - ke_array(_samakan(citra_b, img)))
+
+def multiply(img, faktor=1.5, citra_b=None):
+    if citra_b is None:
+        return ke_citra(ke_array(img) * faktor)
+    return ke_citra(ke_array(img) * ke_array(_samakan(citra_b, img)))
 
 
-def divide(img, pembagi=1.5):
-    return ke_citra(ke_array(img) / max(pembagi, 0.1))   # hindari bagi nol
+def divide(img, pembagi=1.5, citra_b=None):
+    if citra_b is None:
+        return ke_citra(ke_array(img) / max(pembagi, 0.1))
+    return ke_citra(ke_array(img) / max(ke_array(_samakan(citra_b, img)), 0.1))   # hindari bagi nol
 
 
 # ---------------------- Boolean ----------------------
 
-def _citra_kedua(img, bentuk):
-    """Citra pembanding untuk AND/OR/XOR: bentuk putih di atas latar hitam."""
-    w, h = img.size
-    kedua = Image.new("RGB", (w, h), (0, 0, 0))
-    gambar = ImageDraw.Draw(kedua)
-    putih = (255, 255, 255)
-    if bentuk == "Lingkaran":
-        r = min(w, h) * 0.4
-        gambar.ellipse([w / 2 - r, h / 2 - r, w / 2 + r, h / 2 + r], fill=putih)
-    elif bentuk == "Persegi":
-        s = min(w, h) * 0.35
-        gambar.rectangle([w / 2 - s, h / 2 - s, w / 2 + s, h / 2 + s], fill=putih)
-    else:                                      # Setengah kiri
-        gambar.rectangle([0, 0, w // 2, h], fill=putih)
-    return np.asarray(kedua, dtype=np.uint8)
-
-
-def _boolean(img, fungsi, bentuk):
-    a = np.asarray(img, dtype=np.uint8)
-    return Image.fromarray(fungsi(a, _citra_kedua(img, bentuk)))
-
-
 def bool_not(img):
     return Image.fromarray(np.bitwise_not(np.asarray(img, dtype=np.uint8)))
 
+def _boolean(img, citra_b, fungsi):
+    if citra_b is None:
+        raise ValueError("Pilih Gambar B terlebih dahulu.")
+    a = np.asarray(img.convert("RGB"), dtype=np.uint8)
+    b = np.asarray(_samakan(citra_b, img), dtype=np.uint8)
+    return Image.fromarray(fungsi(a, b))
 
-def bool_and(img, bentuk="Lingkaran"):
-    return _boolean(img, np.bitwise_and, bentuk)
 
+def bool_and(img, citra_b=None):
+    return _boolean(img, citra_b, np.bitwise_and)
 
-def bool_or(img, bentuk="Lingkaran"):
-    return _boolean(img, np.bitwise_or, bentuk)
+def bool_or(img, citra_b=None):
+    return _boolean(img, citra_b, np.bitwise_or)
 
+def bool_xor(img, citra_b=None):
+    return _boolean(img, citra_b, np.bitwise_xor)
 
-def bool_xor(img, bentuk="Lingkaran"):
-    return _boolean(img, np.bitwise_xor, bentuk)
 
 
 # ---------------------- Geometrics ----------------------
@@ -323,15 +322,15 @@ OPERASI = {
     "Fourier Transform": {"fungsi": fourier_transform, "params": [
         pilihan("tampilan", "Tampilan", ["Spektrum magnitudo", "Spektrum fase"])]},
 
-    "Add": {"fungsi": add, "params": [slider("nilai", "Nilai Konstanta", 0, 255, 50)]},
-    "Subtract": {"fungsi": subtract, "params": [slider("nilai", "Nilai Konstanta", 0, 255, 50)]},
-    "Multiply": {"fungsi": multiply, "params": [slider("faktor", "Faktor pengali", 0.1, 5, 1.5, 0.1, "x")]},
-    "Divide": {"fungsi": divide, "params": [slider("pembagi", "Faktor pembagi", 0.2, 5, 1.5, 0.1, "x")]},
+    "Add": {"fungsi": add, "params": [slider("nilai", "Nilai Konstanta", 0, 255, 50)], "dua_citra": "opsional"},
+    "Subtract": {"fungsi": subtract, "params": [slider("nilai", "Nilai Konstanta", 0, 255, 50)], "dua_citra": "opsional"},
+    "Multiply": {"fungsi": multiply, "params": [slider("faktor", "Faktor pengali", 0.1, 5, 1.5, 0.1, "x")], "dua_citra": "opsional"},
+    "Divide": {"fungsi": divide, "params": [slider("pembagi", "Faktor pembagi", 0.2, 5, 1.5, 0.1, "x")], "dua_citra": "opsional"},
 
     "NOT": {"fungsi": bool_not, "params": []},
-    "AND": {"fungsi": bool_and, "params": [BENTUK]},
-    "OR": {"fungsi": bool_or, "params": [BENTUK]},
-    "XOR": {"fungsi": bool_xor, "params": [BENTUK]},
+    "AND": {"fungsi": bool_and, "params": [], "dua_citra": "wajib"},
+    "OR": {"fungsi": bool_or, "params": [], "dua_citra": "wajib"},
+    "XOR": {"fungsi": bool_xor, "params": [], "dua_citra": "wajib"},
 
     "Translation": {"fungsi": translation, "params": [
         slider("geser_x", "Geser horizontal", -100, 100, 10, satuan="%"),
