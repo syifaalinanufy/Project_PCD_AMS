@@ -801,10 +801,16 @@ body.app footer {
   border-radius: 50%;
   background: var(--hijau);
   color: #f1e8d8;
-  font:
-    600 22px "Playfair Display",
-    Georgia,
-    serif;
+  
+}
+
+.avatar {
+  overflow: hidden;
+}
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .about-links {
   list-style: none;
@@ -831,4 +837,11 @@ body.app footer {
 }
 .about-links .icon {
   stroke: #f1e8d8;
+}
+
+.canvas canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
