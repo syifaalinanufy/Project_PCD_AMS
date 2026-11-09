@@ -1,9 +1,5 @@
 from .basic_ops import OPERASI as _BASIC_OPS
 from .dua_citra import DUA_CITRA
-from .edge import OPERASI as _EDGE
-from .enhancement import OPERASI as _ENH
-from .noise import OPERASI as _NOISE
-from .segmentation import OPERASI as _SEG
 from .histogram import hitung_histogram  
 
 # Basic Ops: operasi dengan dua citra berbeda (Add, AND, dst.)
