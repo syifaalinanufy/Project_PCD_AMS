@@ -1,14 +1,3 @@
-"""
-Operasi menu Basic Ops.
-
-Setiap operasi adalah fungsi yang menerima citra Pillow (mode RGB) beserta
-parameternya, lalu mengembalikan citra Pillow baru (mode RGB).
-
-Daftar semua operasi dan definisi parameternya ada di dict OPERASI (paling
-bawah file). app.py memakainya untuk menjalankan operasi, dan halaman web
-memakainya untuk membuat slider/pilihan secara otomatis. Jadi menambah
-operasi baru cukup menulis fungsinya lalu mendaftarkannya di OPERASI.
-"""
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageOps
 
