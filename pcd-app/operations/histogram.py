@@ -1,9 +1,3 @@
-"""
-Perhitungan histogram dan statistik citra.
-
-Histogram dihitung untuk 4 kanal sekaligus (keabuan, R, G, B) supaya
-pengguna bisa berganti kanal di halaman tanpa meminta data ulang ke server.
-"""
 import numpy as np
 
 
