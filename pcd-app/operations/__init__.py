@@ -11,9 +11,9 @@ OPS = _BASIC_OPS
 GRUP = {
     "ops": OPS,
     "enh": _ENH,
-    #"noise": _NOISE,
-    #"edge": _EDGE,
-    #"seg": _SEG,
+    "noise": _NOISE,
+    "edge": _EDGE,
+    "seg": _SEG,
 }
 
 # Teks tombol di ribbon
