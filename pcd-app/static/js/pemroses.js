@@ -267,24 +267,147 @@
   });
 
   /* ---------- tampilan hasil, histogram, statistik ---------- */
-  function gambarHistogram(g) {
+  /* warna ujung terang strip gradasi di bawah sumbu X, per kanal */
+  const UJUNG_GRADASI = {
+    gray: "#ffffff",
+    r: "#ff0000",
+    g: "#00ff00",
+    b: "#0000ff",
+  };
+
+  /* angka ringkas untuk sumbu Y: 850, 12rb, 1,2jt */
+  function angkaSingkat(n) {
+    if (n >= 1e6) return (n / 1e6).toFixed(1).replace(".", ",") + "jt";
+    if (n >= 1e3) return Math.round(n / 1e3) + "rb";
+    return String(Math.round(n));
+  }
+
+  /* sorot = indeks nilai intensitas (0..255) yang sedang ditunjuk kursor */
+  function gambarHistogram(g, sorot = null) {
     const canvas = $(".hist-canvas", g.el);
-    const w = (canvas.width = canvas.clientWidth);
-    const h = (canvas.height = canvas.clientHeight);
+    const w = canvas.clientWidth;
+    const h = canvas.clientHeight;
     if (!w || !h) return; /* menu sedang tersembunyi */
+    const dpr = window.devicePixelRatio || 1; /* agar teks tajam */
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
     const ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
     const hasil = riwayat[riwayat.length - 1];
     if (!hasil) return;
     const kanal = $(".hist-kanal", g.el).value;
     const data = hasil.histogram[kanal];
     const maks = Math.max(...data) || 1;
-    ctx.fillStyle = WARNA[kanal];
-    const lebar = w / 256;
-    data.forEach((v, i) => {
-      const tinggi = (v / maks) * (h - 6);
-      ctx.fillRect(i * lebar, h - tinggi, Math.max(lebar, 1), tinggi);
+
+    /* area grafik (di dalam margin untuk label sumbu) */
+    const KIRI = 48,
+      KANAN = 10,
+      ATAS = 18,
+      BAWAH = 36;
+    const pw = w - KIRI - KANAN; /* lebar area batang */
+    const ph = h - ATAS - BAWAH; /* tinggi area batang */
+    if (pw < 40 || ph < 20) return;
+    const x0 = KIRI;
+    const y0 = ATAS + ph; /* garis dasar sumbu X */
+    const lebar = pw / 256;
+    const WARNA_TEKS = "#5b5446";
+    ctx.font = "10px system-ui, sans-serif";
+
+    /* sumbu Y: garis bantu dan angka jumlah piksel (0, setengah, maksimum) */
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    [0, 0.5, 1].forEach((f) => {
+      const y = y0 - f * ph;
+      ctx.strokeStyle = "rgba(0,0,0,0.12)";
+      ctx.beginPath();
+      ctx.moveTo(x0, y);
+      ctx.lineTo(x0 + pw, y);
+      ctx.stroke();
+      ctx.fillStyle = WARNA_TEKS;
+      ctx.fillText(angkaSingkat(maks * f), x0 - 4, y);
     });
+
+    /* batang histogram: tinggi relatif terhadap batang tertinggi */
+    ctx.fillStyle = WARNA[kanal];
+    data.forEach((v, i) => {
+      const t = (v / maks) * ph;
+      ctx.fillRect(x0 + i * lebar, y0 - t, Math.max(lebar, 1), t);
+    });
+
+    /* garis sumbu X dan Y */
+    ctx.strokeStyle = "#6b6355";
+    ctx.beginPath();
+    ctx.moveTo(x0, ATAS);
+    ctx.lineTo(x0, y0);
+    ctx.lineTo(x0 + pw, y0);
+    ctx.stroke();
+
+    /* strip gradasi: menunjukkan kiri = gelap, kanan = terang */
+    const gradasi = ctx.createLinearGradient(x0, 0, x0 + pw, 0);
+    gradasi.addColorStop(0, "#000000");
+    gradasi.addColorStop(1, UJUNG_GRADASI[kanal]);
+    ctx.fillStyle = gradasi;
+    ctx.fillRect(x0, y0 + 2, pw, 5);
+
+    /* sumbu X: angka intensitas */
+    ctx.fillStyle = WARNA_TEKS;
+    ctx.textBaseline = "top";
+    [0, 64, 128, 192, 255].forEach((v, idx, arr) => {
+      const x = x0 + (v + 0.5) * lebar;
+      ctx.textAlign =
+        idx === 0 ? "left" : idx === arr.length - 1 ? "right" : "center";
+      ctx.fillText(
+        String(v),
+        idx === 0 ? x0 : idx === arr.length - 1 ? x0 + pw : x,
+        y0 + 9,
+      );
+    });
+
+    /* judul sumbu */
+    ctx.textAlign = "center";
+    ctx.fillText(
+      "Intensitas piksel (0 = gelap → 255 = terang)",
+      x0 + pw / 2,
+      y0 + 22,
+    );
+    ctx.save();
+    ctx.translate(9, ATAS + ph / 2);
+    ctx.rotate(-Math.PI / 2);
+    ctx.textBaseline = "middle";
+    ctx.fillText("Jumlah piksel", 0, 0);
+    ctx.restore();
+
+    /* keterangan di atas grafik: nilai yang ditunjuk kursor */
+    ctx.textAlign = "right";
+    ctx.textBaseline = "middle";
+    if (sorot !== null) {
+      const t = (data[sorot] / maks) * ph;
+      ctx.fillStyle = "rgba(190,40,40,0.9)";
+      ctx.fillRect(x0 + sorot * lebar, y0 - t, Math.max(lebar, 2), t);
+      ctx.fillRect(x0 + sorot * lebar, ATAS, 1, ph - t);
+      ctx.fillStyle = WARNA_TEKS;
+      ctx.fillText(
+        `Intensitas ${sorot}: ${data[sorot].toLocaleString("id-ID")} piksel`,
+        x0 + pw,
+        ATAS / 2,
+      );
+    } else {
+      ctx.fillStyle = "rgba(91,84,70,0.7)";
+      ctx.fillText(
+        "Arahkan kursor ke grafik untuk melihat nilai",
+        x0 + pw,
+        ATAS / 2,
+      );
+    }
+
+    /* interaksi kursor: gambar ulang dengan batang yang ditunjuk disorot */
+    canvas.onmousemove = (e) => {
+      const r = canvas.getBoundingClientRect();
+      const i = Math.floor((e.clientX - r.left - x0) / lebar);
+      gambarHistogram(g, i >= 0 && i < 256 ? i : null);
+    };
+    canvas.onmouseleave = () => gambarHistogram(g, null);
   }
   const gambarSemuaHistogram = () => GRUP.forEach(gambarHistogram);
 
