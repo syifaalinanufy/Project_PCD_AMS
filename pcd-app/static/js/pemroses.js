@@ -14,6 +14,8 @@
   let fileA = null; /* gambar yang dibuka */
   let fileB = null; /* Gambar B (operasi dua gambar) */
   let sedangProses = false;
+  let histAsli =
+    null; /* histogram + statistik citra asli (sebelum operasi apa pun) */
   const riwayat = []; /* hasil tiap Terapkan; dipakai semua menu */
 
   /* gaya kotak angka di samping slider (ditambahkan dari sini agar tidak perlu mengubah CSS) */
@@ -126,7 +128,17 @@
     $("#fileInfo").textContent = f.name;
     aturRasio(url);
     riwayat.length = 0;
+    histAsli = null;
     tampilkan();
+    /* histogram citra asli langsung tampil tanpa perlu menerapkan operasi */
+    hitungHistogramLokal(url)
+      .then((hs) => {
+        if (fileA === f) {
+          histAsli = hs;
+          tampilkan();
+        }
+      })
+      .catch(() => toast("Histogram citra asli gagal dihitung."));
     e.target.value = ""; /* supaya file yang sama bisa dibuka lagi */
   });
 
@@ -275,11 +287,50 @@
     b: "#0000ff",
   };
 
+  /* Operasi yang histogramnya TIDAK ditampilkan, beserta alasannya.
+     Semua operasi Basic Ops tetap menampilkan histogram (distribusi intensitas piksel).
+     Untuk menampilkan histogram di semua operasi, kosongkan objek ini: const TANPA_HISTOGRAM = {}; */
+  const TANPA_HISTOGRAM = {
+    "Geometrics correction":
+      "Operasi geometri hanya memindahkan posisi piksel, nilainya tetap, jadi histogram hampir tidak berubah.",
+    "Region Growing":
+      "Hasil utama segmentasi ada pada wilayah yang disorot di gambar.",
+    "Contour Detection":
+      "Hasil utama segmentasi ada pada garis kontur di gambar.",
+  };
+
+  /* menulis teks di tengah kanvas, dipotong per baris agar muat */
+  function tulisTengah(ctx, teks, w, y, maksLebar) {
+    const kata = teks.split(" ");
+    const baris = [];
+    let sekarang = "";
+    kata.forEach((k) => {
+      const coba = sekarang ? sekarang + " " + k : k;
+      if (ctx.measureText(coba).width > maksLebar && sekarang) {
+        baris.push(sekarang);
+        sekarang = k;
+      } else sekarang = coba;
+    });
+    if (sekarang) baris.push(sekarang);
+    baris.forEach((b, i) => ctx.fillText(b, w / 2, y + i * 15));
+  }
+
   /* angka ringkas untuk sumbu Y: 850, 12rb, 1,2jt */
   function angkaSingkat(n) {
     if (n >= 1e6) return (n / 1e6).toFixed(1).replace(".", ",") + "jt";
     if (n >= 1e3) return Math.round(n / 1e3) + "rb";
     return String(Math.round(n));
+  }
+
+  /* Histogram yang digambar:
+     - belum ada operasi  -> histogram CITRA ASLI (dihitung di browser saat file dibuka)
+     - sudah ada operasi  -> batang = SESUDAH (hasil terakhir),
+                             garis  = SEBELUM (masukan operasi terakhir) */
+  function sebelumOperasiTerakhir() {
+    const n = riwayat.length;
+    if (n >= 2) return riwayat[n - 2];
+    if (n === 1) return histAsli;
+    return null;
   }
 
   /* sorot = indeks nilai intensitas (0..255) yang sedang ditunjuk kursor */
@@ -294,11 +345,36 @@
     const ctx = canvas.getContext("2d");
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.clearRect(0, 0, w, h);
+    canvas.onmousemove = null;
+    canvas.onmouseleave = null;
+
     const hasil = riwayat[riwayat.length - 1];
-    if (!hasil) return;
+    const utama = hasil || histAsli;
+    if (!utama) return;
+
+    /* operasi tertentu: tampilkan keterangan, bukan histogram */
+    const alasan = hasil && TANPA_HISTOGRAM[hasil.op];
+    if (alasan) {
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#5b5446";
+      ctx.font = "600 12px system-ui, sans-serif";
+      ctx.fillText(
+        `Histogram tidak ditampilkan untuk operasi ${hasil.op}`,
+        w / 2,
+        h / 2 - 18,
+      );
+      ctx.font = "11px system-ui, sans-serif";
+      tulisTengah(ctx, alasan, w, h / 2 + 4, w - 40);
+      return;
+    }
+
     const kanal = $(".hist-kanal", g.el).value;
-    const data = hasil.histogram[kanal];
-    const maks = Math.max(...data) || 1;
+    const data = utama.histogram[kanal];
+    const pembanding = hasil ? sebelumOperasiTerakhir() : null;
+    const dataLama = pembanding ? pembanding.histogram[kanal] : null;
+    /* skala Y bersama agar tinggi sebelum & sesudah bisa dibandingkan */
+    const maks = Math.max(...data, ...(dataLama || [0])) || 1;
 
     /* area grafik (di dalam margin untuk label sumbu) */
     const KIRI = 48,
@@ -312,6 +388,7 @@
     const y0 = ATAS + ph; /* garis dasar sumbu X */
     const lebar = pw / 256;
     const WARNA_TEKS = "#5b5446";
+    const WARNA_SEBELUM = "#c0602a";
     ctx.font = "10px system-ui, sans-serif";
 
     /* sumbu Y: garis bantu dan angka jumlah piksel (0, setengah, maksimum) */
@@ -328,12 +405,27 @@
       ctx.fillText(angkaSingkat(maks * f), x0 - 4, y);
     });
 
-    /* batang histogram: tinggi relatif terhadap batang tertinggi */
+    /* batang: citra asli (belum ada operasi) atau citra SESUDAH operasi */
     ctx.fillStyle = WARNA[kanal];
     data.forEach((v, i) => {
       const t = (v / maks) * ph;
       ctx.fillRect(x0 + i * lebar, y0 - t, Math.max(lebar, 1), t);
     });
+
+    /* garis: histogram SEBELUM operasi terakhir */
+    if (dataLama) {
+      ctx.strokeStyle = WARNA_SEBELUM;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      dataLama.forEach((v, i) => {
+        const y = y0 - (v / maks) * ph;
+        if (i === 0) ctx.moveTo(x0, y);
+        ctx.lineTo(x0 + i * lebar, y);
+        ctx.lineTo(x0 + (i + 1) * lebar, y);
+      });
+      ctx.stroke();
+      ctx.lineWidth = 1;
+    }
 
     /* garis sumbu X dan Y */
     ctx.strokeStyle = "#6b6355";
@@ -378,27 +470,47 @@
     ctx.fillText("Jumlah piksel", 0, 0);
     ctx.restore();
 
-    /* keterangan di atas grafik: nilai yang ditunjuk kursor */
-    ctx.textAlign = "right";
+    /* legenda di kiri atas */
     ctx.textBaseline = "middle";
+    ctx.textAlign = "left";
+    const yLeg = ATAS / 2;
+    ctx.fillStyle = WARNA[kanal];
+    ctx.fillRect(x0, yLeg - 4, 8, 8);
+    ctx.fillStyle = WARNA_TEKS;
+    if (dataLama) {
+      ctx.fillText("Sesudah", x0 + 12, yLeg);
+      const xL = x0 + 12 + ctx.measureText("Sesudah").width + 10;
+      ctx.strokeStyle = WARNA_SEBELUM;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(xL, yLeg);
+      ctx.lineTo(xL + 12, yLeg);
+      ctx.stroke();
+      ctx.lineWidth = 1;
+      ctx.fillText("Sebelum", xL + 16, yLeg);
+    } else {
+      ctx.fillText(hasil ? "Hasil" : "Citra asli", x0 + 12, yLeg);
+    }
+
+    /* keterangan di kanan atas: nilai yang ditunjuk kursor */
+    ctx.textAlign = "right";
     if (sorot !== null) {
       const t = (data[sorot] / maks) * ph;
       ctx.fillStyle = "rgba(190,40,40,0.9)";
       ctx.fillRect(x0 + sorot * lebar, y0 - t, Math.max(lebar, 2), t);
       ctx.fillRect(x0 + sorot * lebar, ATAS, 1, ph - t);
       ctx.fillStyle = WARNA_TEKS;
+      const fmt = (n) => n.toLocaleString("id-ID");
       ctx.fillText(
-        `Intensitas ${sorot}: ${data[sorot].toLocaleString("id-ID")} piksel`,
+        dataLama
+          ? `${sorot}: ${fmt(data[sorot])} px (sebelum ${fmt(dataLama[sorot])})`
+          : `Intensitas ${sorot}: ${fmt(data[sorot])} piksel`,
         x0 + pw,
-        ATAS / 2,
+        yLeg,
       );
     } else {
       ctx.fillStyle = "rgba(91,84,70,0.7)";
-      ctx.fillText(
-        "Arahkan kursor ke grafik untuk melihat nilai",
-        x0 + pw,
-        ATAS / 2,
-      );
+      ctx.fillText("Arahkan kursor ke grafik", x0 + pw, yLeg);
     }
 
     /* interaksi kursor: gambar ulang dengan batang yang ditunjuk disorot */
@@ -408,6 +520,71 @@
       gambarHistogram(g, i >= 0 && i < 256 ? i : null);
     };
     canvas.onmouseleave = () => gambarHistogram(g, null);
+  }
+
+  /* Histogram + statistik citra asli, dihitung di browser (tanpa server)
+     dengan rumus yang sama seperti operations/histogram.py */
+  function hitungHistogramLokal(url) {
+    return new Promise((selesai, gagal) => {
+      const im = new Image();
+      im.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = im.naturalWidth;
+        c.height = im.naturalHeight;
+        const cx = c.getContext("2d");
+        cx.drawImage(im, 0, 0);
+        const px = cx.getImageData(0, 0, c.width, c.height).data;
+        const gray = new Array(256).fill(0),
+          r = new Array(256).fill(0),
+          gg = new Array(256).fill(0),
+          b = new Array(256).fill(0);
+        let jumlah = 0,
+          jumlahKuadrat = 0;
+        for (let i = 0; i < px.length; i += 4) {
+          const x = 0.299 * px[i] + 0.587 * px[i + 1] + 0.114 * px[i + 2];
+          /* pembulatan ke genap terdekat, sama seperti np.rint di server */
+          let abu = Math.round(x);
+          if (abu - x === 0.5 && abu % 2) abu -= 1;
+          gray[abu]++;
+          r[px[i]]++;
+          gg[px[i + 1]]++;
+          b[px[i + 2]]++;
+          jumlah += abu;
+          jumlahKuadrat += abu * abu;
+        }
+        const n = px.length / 4;
+        const rata = jumlah / n;
+        /* median dari histogram kumulatif */
+        const nilaiKe = (k) => {
+          let kum = 0;
+          for (let v = 0; v < 256; v++) {
+            kum += gray[v];
+            if (kum > k) return v;
+          }
+          return 255;
+        };
+        const median =
+          n % 2
+            ? nilaiKe((n - 1) / 2)
+            : Math.trunc((nilaiKe(n / 2 - 1) + nilaiKe(n / 2)) / 2);
+        selesai({
+          histogram: { gray, r, g: gg, b },
+          statistik: {
+            min: gray.findIndex((v) => v > 0),
+            max: 255 - [...gray].reverse().findIndex((v) => v > 0),
+            rata: Math.round(rata * 100) / 100,
+            median,
+            std:
+              Math.round(
+                Math.sqrt(Math.max(jumlahKuadrat / n - rata * rata, 0)) * 100,
+              ) / 100,
+            piksel: n,
+          },
+        });
+      };
+      im.onerror = gagal;
+      im.src = url;
+    });
   }
   const gambarSemuaHistogram = () => GRUP.forEach(gambarHistogram);
 
@@ -419,7 +596,8 @@
       if (hasil) img.src = hasil.image;
       const k = $(".kosong", img.parentElement);
       if (k) k.style.display = hasil ? "none" : "";
-      const s = hasil && hasil.statistik;
+      /* statistik hasil terakhir; sebelum ada operasi = statistik citra asli */
+      const s = hasil ? hasil.statistik : histAsli && histAsli.statistik;
       $(".stats", g.el).innerHTML = s
         ? `<dt>Min</dt><dd>${s.min}</dd><dt>Max</dt><dd>${s.max}</dd>` +
           `<dt>Rata-rata</dt><dd>${s.rata}</dd><dt>Median</dt><dd>${s.median}</dd>` +
@@ -461,6 +639,8 @@
       const res = await fetch("/api/process", { method: "POST", body: fd });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Terjadi kesalahan.");
+      data.op =
+        g.nama; /* dicatat agar histogram tahu operasi apa yang menghasilkan citra ini */
       riwayat.push(data);
       tampilkan();
       if (data.info) toast(data.info);
